@@ -9,10 +9,11 @@
 import UIKit
 
 class ColorsViewController: UIViewController {
-
+    @IBOutlet weak var colorPlateView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        addPanGesture(view: self.view)
+        addPanGesture(view: self.colorPlateView)
     }
     
     func addPanGesture(view:UIView) {
@@ -22,10 +23,16 @@ class ColorsViewController: UIViewController {
 
     func handlePanGesture(sender:UIPanGestureRecognizer) {
         if let senderView = sender.view {
-            let translation = sender.translation(in: senderView)
+            //let translation = sender.translation(in: senderView)
+            //let point = CGPoint(x: (sender.view?.center.x)! + translation.x, y: (sender.view?.center.y)! + translation.y)
+            let point = sender.location(in: senderView)
+            print("location in view = \(sender.location(in: senderView))")
+            print("transaltion x = \(point.x) y = \(point.y)")
+            let hue = point.y / senderView.frame.height
+            let saturation = point.x / senderView.frame.width
             switch sender.state {
             case .began, .changed:
-                self.view.backgroundColor = UIColor(red: translation.x / 255.0, green: 0.0, blue: translation.y / 255.0, alpha: 1.0)
+                self.view.backgroundColor = UIColor(hue: hue , saturation: saturation, brightness: 1.0, alpha: 1.0)
             case .ended:
                 break
             default:
